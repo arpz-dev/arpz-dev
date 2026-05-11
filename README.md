@@ -1,12 +1,9 @@
 # Hi! 👋
 
-### Full Stack Web Developer in Training | Building Digital Experiences
-
-I am a passionate web developer based in [Your City/Country]. I enjoy turning complex problems into simple, beautiful, and intuitive designs. Currently, I'm focusing on mastering the JavaScript ecosystem and exploring modern frontend architectures.
-
+I am a passionate web developer.
 ---
 
-### 🚀 Tech Stack & Tools
+### Tech Stack & Tools
 
 **Frontend Development**
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
