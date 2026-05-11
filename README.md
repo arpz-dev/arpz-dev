@@ -1,4 +1,4 @@
-# Hi there! I'm [Your Name] 👋
+# Hi! 👋
 
 ### Full Stack Web Developer in Training | Building Digital Experiences
 
