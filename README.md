@@ -1,4 +1,4 @@
-<img src="https://i.pinimg.com/originals/c5/eb/05/c5eb05561c26dcd11228ed33cd3e707c.gif" alt="Banner" width="100%" />
+<img width="800" height="138" alt="ojitos-banner" src="https://github.com/user-attachments/assets/f8f2fb29-8169-46a0-b80b-9e2d2997c417" />
 
 <div align="center">
   <img src="profile-3d-city.svg" alt="3D City" width="100%" />
