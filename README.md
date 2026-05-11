@@ -1,6 +1,6 @@
 # Hi! 👋
 
-I am a passionate web developer.
+I am a passionate web developer
 ---
 
 ### Tech Stack & Tools
