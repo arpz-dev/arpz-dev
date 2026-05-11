@@ -1,10 +1,3 @@
-
-<p align="center">
-  <a href="https://komarev.com/ghpvc/?username=user02-dev">
-    <img src="https://komarev.com/ghpvc/?username=user02-dev&label=Profile%20views&color=00FFFF&style=flat-square" alt="user02-dev's profile views" />
-  </a>
-</p>
-
 <img src="https://i.pinimg.com/originals/c5/eb/05/c5eb05561c26dcd11228ed33cd3e707c.gif" alt="Banner" width="100%" />
 
 <div align="center">
