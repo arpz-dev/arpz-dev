@@ -1,12 +1,9 @@
-name: generate breakout contribution graphs
+name: generate breakout animation
 
 on:
-  # Se ejecuta automáticamente cada 24 horas
   schedule:
-    - cron: "0 0 * * *"
-  # Permite ejecutarlo manualmente desde la pestaña Actions
+    - cron: "0 */12 * * *"
   workflow_dispatch:
-  # Se ejecuta en cada push a la rama principal
   push:
     branches:
       - main
@@ -19,23 +16,17 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      # Genera las imágenes del juego Breakout
-      - name: generate breakout-contribution-graph.svg
-        uses: abozanona/pacman-contribution-graph@main
-        with:
-          github_user_name: ${{ github.repository_owner }}
-          games: "breakout"
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      # Renombra los archivos generados al formato que espera tu README y los mueve a dist
-      - name: prepare output files
+      - name: Fetch Breakout SVG files
         run: |
           mkdir -p dist
-          cp output/breakout-contribution-graph.svg dist/breakout-contribution-graph.svg
-          cp output/breakout-contribution-graph-dark.svg dist/breakout-contribution-graph-dark.svg
+          curl -s "https://profile-readme-generator.com/api/arcade?username=${{ github.repository_owner }}&game=breakout&theme=dark" -o dist/breakout-contribution-graph-dark.svg
+          curl -s "https://profile-readme-generator.com/api/arcade?username=${{ github.repository_owner }}&game=breakout" -o dist/breakout-contribution-graph.svg
 
-      # Sube los archivos a la rama pacman-output
-      - name: push SVGs to the pacman-output branch
-        uses: crazy-max/ghaction-github-pages@v3.1.0
+      - name: Push animation to pacman-output branch
+        uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: pacman-output
           build_dir: dist
