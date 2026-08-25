@@ -1,37 +1,40 @@
-name: generate animation
+name: generate breakout animation
 
 on:
-  # Ejecuta automáticamente cada 12 horas
   schedule:
     - cron: "0 */12 * * *"
-  
-  # Permite ejecutar manualmente desde la pestaña Actions
   workflow_dispatch:
-  
-  # Ejecuta en cada push a la rama main
   push:
     branches:
-    - main
-    
+      - main
+
 jobs:
   generate:
-    permissions: 
+    permissions:
       contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    
+
     steps:
-      # Genera la animación del juego Breakout
-      - name: generate breakout contribution graph
-        uses: Platane/snk/svg-only@v3
+      - name: generate breakout SVG
+        uses: lowlighter/metrics@latest
         with:
-          github_user_name: ${{ github.repository_owner }}
-          outputs: |
-            dist/breakout-contribution-graph.svg?game=breakout
-            dist/breakout-contribution-graph-dark.svg?game=breakout&palette=github-dark
-            
-      # Publica los archivos SVG en la rama pacman-output
-      - name: push animation to the output branch
+          token: ${{ secrets.GITHUB_TOKEN }}
+          user: ${{ github.repository_owner }}
+          template: classic
+          base: ""
+          plugin_isometric: no
+          plugin_languages: no
+
+      # Alternativa nativa sin depender de compilación compleja:
+      # Descarga directa del renderer de Profile Readme Generator
+      - name: generate breakout grid
+        run: |
+          mkdir -p dist
+          curl -s "https://profile-readme-generator.com/api/breakout?username=${{ github.repository_owner }}" -o dist/breakout-contribution-graph.svg
+          curl -s "https://profile-readme-generator.com/api/breakout?username=${{ github.repository_owner }}&theme=dark" -o dist/breakout-contribution-graph-dark.svg
+
+      - name: push animation to output branch
         uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
           target_branch: pacman-output
