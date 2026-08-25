@@ -21,17 +21,17 @@ jobs:
     timeout-minutes: 5
     
     steps:
-      # Genera el gráfico de pacman/snake en la carpeta dist/
-      - name: generate github-contribution-grid-snake.svg
+      # Genera la animación del juego Breakout
+      - name: generate breakout contribution graph
         uses: Platane/snk/svg-only@v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
-            dist/breakout-contribution-graph.svg
-            dist/breakout-contribution-graph-dark.svg?palette=github-dark
+            dist/breakout-contribution-graph.svg?game=breakout
+            dist/breakout-contribution-graph-dark.svg?game=breakout&palette=github-dark
             
-      # Publica el archivo generado en la rama pacman-output
-      - name: push github-contribution-grid-snake.svg to the output branch
+      # Publica los archivos SVG en la rama pacman-output
+      - name: push animation to the output branch
         uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
           target_branch: pacman-output
