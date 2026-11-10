@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="120" viewBox="0 0 900 120" role="img" aria-label="Instagram @YOUR_INSTAGRAM">
+  <rect width="900" height="120" fill="#000000"/>
+
+  <!-- Black block: slides in from the left -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="-300 0" to="0 0" dur="0.6s" fill="freeze"/>
+    <rect width="300" height="120" fill="#000000"/>
+    <text x="150" y="74" font-family="Arial Black, Helvetica, Arial, sans-serif" font-size="32" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">INSTAGRAM</text>
+    <rect x="0" y="112" width="300" height="8" fill="#E10600"/>
+  </g>
+
+  <!-- White block: drops from the top -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="0 -120" to="0 0" dur="0.6s" begin="0.4s" fill="freeze"/>
+    <rect x="300" width="360" height="120" fill="#FFFFFF"/>
+    <text x="480" y="74" font-family="Arial Black, Helvetica, Arial, sans-serif" font-size="32" font-weight="900" fill="#000000" text-anchor="middle">@YOUR_INSTAGRAM</text>
+  </g>
+
+  <!-- Red block: slides in from the right -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="300 0" to="0 0" dur="0.6s" begin="0.8s" fill="freeze"/>
+    <rect x="660" width="240" height="120" fill="#E10600"/>
+    <text x="760" y="74" font-family="Arial Black, Helvetica, Arial, sans-serif" font-size="32" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">FOLLOW</text>
+    <text x="852" y="72" font-family="Arial, sans-serif" font-size="34" font-weight="900" fill="#000000" text-anchor="middle">
+      <animate attributeName="opacity" values="1;0.2;1" dur="1.6s" begin="1.6s" repeatCount="indefinite"/>
+      &#8594;
+    </text>
+  </g>
+</svg>
