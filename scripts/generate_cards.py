@@ -89,52 +89,40 @@ def hero_svg():
     head, dash, tail = USER.partition("-")
     body = f"""
   <g font-family="{MONO}" font-size="12" letter-spacing="2" fill="{WHITE}">
-    <text x="44" y="52">(01) WEB PAGES</text>
-    <text x="224" y="52">(02) DISCORD BOTS</text>
-    <text x="440" y="52">(03) DESIGN LAB</text>
-    <text x="836" y="52" text-anchor="end">&#169; {datetime.now().year}</text>
+    <text x="40" y="52">(01) WEB PAGES</text>
+    <text x="220" y="52">(02) DISCORD BOTS</text>
+    <text x="436" y="52">(03) DESIGN LAB</text>
+    <text x="840" y="52" text-anchor="end">&#169; {datetime.now().year}</text>
   </g>
-  <line x1="44" y1="68" x2="836" y2="68" stroke="{WHITE}" stroke-opacity="0.5"/>
-  <circle cx="720" cy="190" r="92" fill="{BLACK}"/>
-  <circle cx="720" cy="190" r="118" fill="none" stroke="{WHITE}" stroke-opacity="0.6" stroke-dasharray="3 9"/>
-  <circle r="9" fill="{WHITE}">
-    <animateMotion dur="9s" repeatCount="indefinite" path="M602 190a118 118 0 1 0 236 0a118 118 0 1 0 -236 0"/>
-  </circle>
-  <rect x="672" y="142" width="96" height="96" fill="none" stroke="{WHITE}" stroke-width="2">
-    <animateTransform attributeName="transform" type="rotate" from="0 720 190" to="360 720 190" dur="26s" repeatCount="indefinite"/>
-  </rect>
-  <text x="40" y="214" font-family="{SERIF}" font-size="128" font-style="italic" fill="{WHITE}">
+  <line x1="40" y1="68" x2="840" y2="68" stroke="{WHITE}" stroke-opacity="0.5"/>
+  <text x="440" y="200" text-anchor="middle" font-family="{SERIF}" font-size="150" font-style="italic" fill="{WHITE}">
     <animate attributeName="opacity" from="0" to="1" dur="1s" fill="freeze"/>{escape(head)}<tspan fill="{BLACK}">{escape(dash + tail)}</tspan>
   </text>
-  <text x="44" y="254" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="{WHITE}">I design tiny web pages, build Discord bots and share the process.</text>
-  <rect x="44" y="278" width="300" height="32" rx="16" fill="{BLACK}"/>
-  <circle cx="64" cy="294" r="5" fill="{WHITE}"><animate attributeName="opacity" values="1;0.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
-  <text x="80" y="298" font-family="{MONO}" font-size="11" letter-spacing="1.5" fill="{WHITE}">OPEN FOR NEW MINI-PROJECTS</text>
 """
-    return svg(880, 330, body, RED, 28)
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="880" height="250" viewBox="0 0 880 250">'
+        f'<path d="M0 28A28 28 0 0 1 28 0H852A28 28 0 0 1 880 28V250H0Z" fill="{RED}"/>{body}</svg>'
+    )
 
 
-def social_tile(name, icon_name, label, sub, bg, fg, accent):
+def button_svg(name, icon_name, label, position):
+    w, h, m, r, ph = 294, 88, 20, 28, 52
+    shapes = {
+        "left": f"M0 0H{w}V{h}H{r}A{r} {r} 0 0 1 0 {h - r}Z",
+        "middle": f"M0 0H{w}V{h}H0Z",
+        "right": f"M0 0H{w}V{h - r}A{r} {r} 0 0 1 {w - r} {h}H0Z",
+    }
+    cy = 18 + ph / 2
     body = (
-        f'<circle cx="52" cy="46" r="28" fill="{fg}"/>'
-        + icon(icon_name, 38, 32, 28, accent)
-        + f'<text x="94" y="56" font-family="{SERIF}" font-size="28" font-style="italic" fill="{fg}">{label}</text>'
-        + f'<text x="28" y="108" font-family="{MONO}" font-size="12" letter-spacing="1" fill="{fg}" fill-opacity="0.85">{escape(sub)}</text>'
-        + f'<g transform="translate(246 22)"><g fill="none" stroke="{fg}" stroke-width="2.5" stroke-linecap="round">'
-        + '<animateTransform attributeName="transform" type="translate" values="0 0;4 -4;0 0" dur="2s" repeatCount="indefinite"/>'
+        f'<path d="{shapes[position]}" fill="{RED}"/>'
+        f'<rect x="{m}" y="18" width="{w - 2 * m}" height="{ph}" rx="{ph / 2}" fill="{BLACK}"/>'
+        + icon(icon_name, m + 24, cy - 13, 26, WHITE)
+        + f'<text x="{m + 64}" y="{cy + 5}" font-family="{MONO}" font-size="15" letter-spacing="2" fill="{WHITE}">{label}</text>'
+        + f'<g transform="translate({w - m - 42} {cy - 7})"><g fill="none" stroke="{WHITE}" stroke-width="2.5" stroke-linecap="round">'
+        + '<animateTransform attributeName="transform" type="translate" values="0 0;3 -3;0 0" dur="2s" repeatCount="indefinite"/>'
         + '<path d="M0 14L14 0M3 0H14V11"/></g></g>'
     )
-    save(name, svg(288, 130, body, bg, 22))
-
-
-def stat_tile(name, label, value, icon_name, bg, fg, accent, twinkle=False):
-    extra = '<animate attributeName="opacity" values="1;0.25;1" dur="2.4s" repeatCount="indefinite"/>' if twinkle else ""
-    body = (
-        f'<text x="22" y="38" font-family="{MONO}" font-size="11" letter-spacing="2" fill="{fg}" fill-opacity="0.85">{label}</text>'
-        + icon(icon_name, 166, 22, 24, accent, extra)
-        + f'<text x="20" y="104" font-family="{SERIF}" font-size="56" font-style="italic" fill="{fg}">{value:,}</text>'
-    )
-    save(name, svg(210, 130, body, bg, 22))
+    save(name, f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">{body}</svg>')
 
 
 # ---------- Languages ----------
@@ -218,13 +206,9 @@ def main():
 
     # Block 1
     save("hero.svg", hero_svg())
-    social_tile("tile-discord.svg", "discord", "Discord", "Join the community", BLACK, WHITE, RED)
-    social_tile("tile-instagram.svg", "instagram", "Instagram", f"@{INSTAGRAM}", WHITE, BLACK, RED)
-    social_tile("tile-twitter.svg", "x", "Twitter", f"@{TWITTER}", RED, WHITE, BLACK)
-    stat_tile("stat-stars.svg", "GITHUB STARS", stars, "star", RED, WHITE, BLACK, twinkle=True)
-    stat_tile("stat-repos.svg", "REPOSITORIES", profile["public_repos"], "repo", BLACK, WHITE, RED)
-    stat_tile("stat-followers.svg", "FOLLOWERS", profile["followers"], "users", WHITE, BLACK, RED)
-    stat_tile("stat-commits.svg", "COMMITS / 12 MO", calendar["totalContributions"], "commit", BLACK, WHITE, RED)
+    button_svg("button-discord.svg", "discord", "DISCORD", "left")
+    button_svg("button-instagram.svg", "instagram", "INSTAGRAM", "middle")
+    button_svg("button-twitter.svg", "x", "TWITTER", "right")
 
     # Languages
     totals = {}
