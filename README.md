@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="TU_URL_DISCORD"><img src="./assets/profile-discord.svg" alt="Discord" width="33%"></a><a href="TU_URL_INSTAGRAM"><img src="./assets/profile-instagram.svg" alt="Instagram" width="33%"></a><a href="TU_URL_X"><img src="./assets/profile-x.svg" alt="X / Twitter" width="33%"></a>
+<img src="./assets/profile-discord.svg" alt="Discord" width="33%"><a href="https://www.instagram.com/arypaniz/"><img src="./assets/profile-instagram.svg" alt="Instagram" width="33%"></a><img src="./assets/profile-x.svg" alt="X / Twitter" width="33%">
 
 <br>
 
