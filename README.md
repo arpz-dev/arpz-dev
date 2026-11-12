@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://github.com/arpz-dev/arpz-dev"><img src="./assets/arypaniz-header-star.svg" alt="Star this repository" width="25%"></a><a href="https://www.instagram.com/arypaniz/"><img src="./assets/arypaniz-header-instagram.svg" alt="Instagram" width="25%"></a><img src="./assets/arypaniz-header-x.svg" alt="X / Twitter" width="25%"><a href="mailto:arpz.digital@gmail.com"><img src="./assets/arypaniz-header-email.svg" alt="Email" width="25%"></a>
+<a href="https://github.com/arpz-dev/arpz-dev"><img src="./assets/arypaniz-icon-star.svg" alt="Star this repository" width="25%"></a><a href="https://www.instagram.com/arypaniz/"><img src="./assets/arypaniz-icon-instagram.svg" alt="Instagram" width="25%"></a><img src="./assets/arypaniz-icon-x.svg" alt="X / Twitter" width="25%"><a href="mailto:arpz.digital@gmail.com"><img src="./assets/arypaniz-icon-email.svg" alt="Email" width="25%"></a>
 
 <br>
 
