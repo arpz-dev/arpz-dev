@@ -1,0 +1,78 @@
+name: Update profile header
+
+on:
+  schedule:
+    - cron: '27 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-header-metrics
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh profile counters
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROFILE_TRAFFIC_TOKEN: ${{ secrets.PROFILE_TRAFFIC_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          from urllib.error import HTTPError
+          from urllib.request import Request, urlopen
+
+          def github(path, token):
+              request = Request(f"https://api.github.com/{path}", headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept": "application/vnd.github+json",
+              })
+              with urlopen(request, timeout=20) as response:
+                  return json.load(response)
+
+          def update(filename, metric, value):
+              if type(value) is not int or value < 0:
+                  raise ValueError(f"Invalid value for {metric}")
+              path = Path("assets") / filename
+              svg = path.read_text(encoding="utf-8")
+              pattern = rf'(data-metric="{metric}">)[\d,]+(</text>)'
+              updated, matches = re.subn(pattern, lambda match: f"{match[1]}{value:,}{match[2]}", svg)
+              if matches != 1:
+                  raise ValueError(f"Expected one {metric} counter in {filename}")
+              if updated != svg:
+                  path.write_text(updated, encoding="utf-8")
+              print(f"{metric}: {value}")
+
+          token = os.environ["GH_TOKEN"]
+          owner = os.environ["GITHUB_REPOSITORY_OWNER"]
+          repository = os.environ["GITHUB_REPOSITORY"]
+          update("arypaniz-followers-live.svg", "followers", github(f"users/{owner}", token)["followers"])
+          traffic_token = os.environ.get("PROFILE_TRAFFIC_TOKEN")
+          try:
+              traffic = github(f"repos/{repository}/traffic/views", traffic_token or token)
+          except HTTPError as error:
+              if error.code not in (401, 403, 404):
+                  raise
+              print(f"::warning::Traffic unavailable (HTTP {error.code}). Configure PROFILE_TRAFFIC_TOKEN with Administration: read. Keeping the last known views.")
+          else:
+              update("arypaniz-views-live.svg", "views", traffic["count"])
+          PY
+      - name: Commit changed counters
+        run: |
+          git add assets/arypaniz-followers-live.svg assets/arypaniz-views-live.svg
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Update profile header counters'
+          git pull --rebase origin main
+          git push origin HEAD:main
