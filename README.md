@@ -1,23 +1,40 @@
 <div align="center">
 
-<img src="./assets/hero-card.svg" alt="arpz-dev" width="100%">
+<a href="https://github.com/arpz-dev?tab=repositories"><img src="./assets/hero.svg" alt="arpz-dev" width="100%"></a>
+
+<a href="https://discord.gg/YOUR_INVITE"><img src="./assets/tile-discord.svg" alt="Discord" width="33%"></a><a href="https://www.instagram.com/YOUR_INSTAGRAM"><img src="./assets/tile-instagram.svg" alt="Instagram" width="33%"></a><a href="https://twitter.com/YOUR_TWITTER"><img src="./assets/tile-twitter.svg" alt="Twitter" width="33%"></a>
+
+<a href="https://github.com/arpz-dev?tab=repositories&sort=stargazers"><img src="./assets/stat-stars.svg" alt="GitHub stars" width="24.5%"></a><a href="https://github.com/arpz-dev?tab=repositories"><img src="./assets/stat-repos.svg" alt="Repositories" width="24.5%"></a><a href="https://github.com/arpz-dev?tab=followers"><img src="./assets/stat-followers.svg" alt="Followers" width="24.5%"></a><a href="https://github.com/arpz-dev"><img src="./assets/stat-commits.svg" alt="Commits" width="24.5%"></a>
+
+<br>
+
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=20&pause=1000&color=E10600&center=true&vCenter=true&width=640&lines=Click+any+block+to+explore;Web+pages+with+personality;Discord+bots+for+fun+communities;Small+projects%2C+big+ideas" alt="Typing animation">
 
 <br><br>
 
-<img src="./assets/daily-heatmap.svg" alt="Every day, in red" width="100%">
+<a href="https://github.com/arpz-dev?tab=repositories"><img src="./assets/languages.svg" alt="Languages used across my repos" width="100%"></a>
+
+<!--LANGS:START-->
+<!--LANGS:END-->
 
 <br><br>
 
-<img src="./assets/contributions-card.svg" alt="Contributions in the last 12 months" width="100%">
+<a href="https://github.com/arpz-dev"><img src="./assets/contributions.svg" alt="Contributions in the last 12 months" width="100%"></a>
 
-<br><br>
+<sub><b>CLICK A MONTH TO SEE WHAT I BUILT</b></sub>
 
-<a href="https://twitter.com/YOUR_TWITTER"><img src="https://img.shields.io/badge/TWITTER-@YOUR_TWITTER-000000?style=for-the-badge&logo=x&logoColor=white&labelColor=E10600" alt="Twitter"></a>
-<img src="https://komarev.com/ghpvc/?username=arpz-dev&style=for-the-badge&color=E10600&labelColor=000000&label=VISITORS" alt="Profile views">
-
-<br><br>
-
-<img src="https://capsule-render.vercel.app/api?type=rect&color=000000&height=8" width="33%"><img src="https://capsule-render.vercel.app/api?type=rect&color=FFFFFF&height=8" width="33%"><img src="https://capsule-render.vercel.app/api?type=rect&color=E10600&height=8" width="33%">
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-01-01&to=2026-01-31"><img src="https://img.shields.io/badge/JAN-E10600?style=flat-square" alt="January"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-02-01&to=2026-02-28"><img src="https://img.shields.io/badge/FEB-E10600?style=flat-square" alt="February"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-03-01&to=2026-03-31"><img src="https://img.shields.io/badge/MAR-E10600?style=flat-square" alt="March"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-04-01&to=2026-04-30"><img src="https://img.shields.io/badge/APR-E10600?style=flat-square" alt="April"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-05-01&to=2026-05-31"><img src="https://img.shields.io/badge/MAY-E10600?style=flat-square" alt="May"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-06-01&to=2026-06-30"><img src="https://img.shields.io/badge/JUN-E10600?style=flat-square" alt="June"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-07-01&to=2026-07-31"><img src="https://img.shields.io/badge/JUL-E10600?style=flat-square" alt="July"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-08-01&to=2026-08-31"><img src="https://img.shields.io/badge/AUG-E10600?style=flat-square" alt="August"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-09-01&to=2026-09-30"><img src="https://img.shields.io/badge/SEP-E10600?style=flat-square" alt="September"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-10-01&to=2026-10-31"><img src="https://img.shields.io/badge/OCT-E10600?style=flat-square" alt="October"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-11-01&to=2026-11-30"><img src="https://img.shields.io/badge/NOV-E10600?style=flat-square" alt="November"></a>
+<a href="https://github.com/arpz-dev?tab=overview&from=2026-12-01&to=2026-12-31"><img src="https://img.shields.io/badge/DEC-E10600?style=flat-square" alt="December"></a>
 
 <br><br>
 
@@ -25,49 +42,8 @@
 
 <br><br>
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <a href="https://github.com/arpz-dev/REPO_1">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=arpz-dev&repo=REPO_1&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&icon_color=E10600&border_color=E10600" alt="REPO_1">
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/arpz-dev/REPO_2">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=arpz-dev&repo=REPO_2&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&icon_color=E10600&border_color=E10600" alt="REPO_2">
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/arpz-dev/REPO_3">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=arpz-dev&repo=REPO_3&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&icon_color=E10600&border_color=E10600" alt="REPO_3">
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/arpz-dev/REPO_4">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=arpz-dev&repo=REPO_4&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&icon_color=E10600&border_color=E10600" alt="REPO_4">
-      </a>
-    </td>
-  </tr>
-</table>
-
-<a href="https://github.com/arpz-dev?tab=repositories">
-  <img src="https://img.shields.io/badge/SEE%20ALL%20REPOSITORIES-→-E10600?style=for-the-badge&logo=github&logoColor=white&labelColor=000000" alt="See all repositories">
-</a>
-
-<br><br>
-
-<img src="https://img.shields.io/badge/-LANGUAGES-FFFFFF?style=for-the-badge" alt="Languages">
-
-<br><br>
-
-<img height="190" src="https://github-readme-stats.vercel.app/api/top-langs/?username=arpz-dev&layout=donut&langs_count=8&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&border_color=E10600" alt="Most used languages">
-<img height="190" src="https://streak-stats.demolab.com?user=arpz-dev&background=0A0A0A&ring=E10600&fire=E10600&currStreakLabel=FFFFFF&currStreakNum=FFFFFF&sideLabels=FFFFFF&sideNums=FFFFFF&dates=AAAAAA&stroke=FFFFFF&border=E10600" alt="Commit streak">
-
-<br><br>
-
-<img src="https://skillicons.dev/icons?i=html,css,js,nodejs,discord,figma,git,github&theme=dark" alt="Tech stack">
+<!--REPOS:START-->
+<!--REPOS:END-->
 
 <br><br>
 
