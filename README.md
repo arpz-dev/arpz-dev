@@ -8,17 +8,11 @@
 
 <br>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=20&pause=1000&color=E10600&center=true&vCenter=true&width=640&lines=Click+any+block+to+explore;Web+pages+with+personality;Discord+bots+for+fun+communities;Small+projects%2C+big+ideas" alt="Typing animation">
-
-<br><br>
-
 <a href="https://github.com/arpz-dev?tab=repositories"><img src="./assets/languages.svg" alt="Languages used across my repos" width="100%"></a>
 
 <!--LANGS:START-->
 
 <!--LANGS:END-->
-
-<br><br>
 
 <a href="https://github.com/arpz-dev"><img src="./assets/contributions.svg" alt="Contributions in the last 12 months" width="100%"></a>
 
