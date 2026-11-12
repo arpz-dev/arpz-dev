@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="96" viewBox="0 0 320 96">
+  <title>X / Twitter</title>
+  <path d="M0 0h320v76a20 20 0 0 1-20 20H0Z" fill="#ed0026"/>
+  <rect x="22" y="15" width="276" height="58" rx="29" fill="#0d0d0d"/>
+  <g transform="translate(50 32)"><path fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" d="M3 3l18 18M21 3 3 21"/></g>
+  <text x="90" y="50" fill="#fff" font-family="monospace" font-size="18"
+        letter-spacing="1.5">X / TWITTER</text>
+  <path d="M255 51l17-17m-13 0h13v13" fill="none" stroke="#fff"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
