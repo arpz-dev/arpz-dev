@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="330" viewBox="0 0 880 330"><rect width="880" height="330" rx="28" fill="#E10600"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" letter-spacing="2" fill="#FFFFFF">
+    <text x="44" y="52">(01) WEB PAGES</text>
+    <text x="224" y="52">(02) DISCORD BOTS</text>
+    <text x="440" y="52">(03) DESIGN LAB</text>
+    <text x="836" y="52" text-anchor="end">&#169; 2026</text>
+  </g>
+  <line x1="44" y1="68" x2="836" y2="68" stroke="#FFFFFF" stroke-opacity="0.5"/>
+  <circle cx="720" cy="190" r="92" fill="#0A0A0A"/>
+  <circle cx="720" cy="190" r="118" fill="none" stroke="#FFFFFF" stroke-opacity="0.6" stroke-dasharray="3 9"/>
+  <circle r="9" fill="#FFFFFF">
+    <animateMotion dur="9s" repeatCount="indefinite" path="M602 190a118 118 0 1 0 236 0a118 118 0 1 0 -236 0"/>
+  </circle>
+  <rect x="672" y="142" width="96" height="96" fill="none" stroke="#FFFFFF" stroke-width="2">
+    <animateTransform attributeName="transform" type="rotate" from="0 720 190" to="360 720 190" dur="26s" repeatCount="indefinite"/>
+  </rect>
+  <text x="40" y="214" font-family="Georgia, 'Times New Roman', serif" font-size="128" font-style="italic" fill="#FFFFFF">
+    <animate attributeName="opacity" from="0" to="1" dur="1s" fill="freeze"/>arpz<tspan fill="#0A0A0A">-dev</tspan>
+  </text>
+  <text x="44" y="254" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#FFFFFF">I design tiny web pages, build Discord bots and share the process.</text>
+  <rect x="44" y="278" width="300" height="32" rx="16" fill="#0A0A0A"/>
+  <circle cx="64" cy="294" r="5" fill="#FFFFFF"><animate attributeName="opacity" values="1;0.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
+  <text x="80" y="298" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" letter-spacing="1.5" fill="#FFFFFF">OPEN FOR NEW MINI-PROJECTS</text>
+</svg>

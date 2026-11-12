@@ -15,6 +15,7 @@
 <a href="https://github.com/arpz-dev?tab=repositories"><img src="./assets/languages.svg" alt="Languages used across my repos" width="100%"></a>
 
 <!--LANGS:START-->
+
 <!--LANGS:END-->
 
 <br><br>
@@ -43,6 +44,8 @@
 <br><br>
 
 <!--REPOS:START-->
+<a href="https://github.com/arpz-dev/websites"><img width="48%" alt="websites" src="https://github-readme-stats.vercel.app/api/pin/?username=arpz-dev&repo=websites&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&icon_color=E10600&border_color=E10600"></a>
+<a href="https://github.com/arpz-dev/creative-ideas-for-the-profile"><img width="48%" alt="creative-ideas-for-the-profile" src="https://github-readme-stats.vercel.app/api/pin/?username=arpz-dev&repo=creative-ideas-for-the-profile&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&icon_color=E10600&border_color=E10600"></a>
 <!--REPOS:END-->
 
 <br><br>
