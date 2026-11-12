@@ -84,7 +84,7 @@ def icon(name, x, y, size, color, extra=""):
     )
 
 
-# ---------- BLOCK 1: hero + social tiles + stat tiles ----------
+# ---------- BLOCK 1: hero + buttons + stat tiles ----------
 def hero_svg():
     head, dash, tail = USER.partition("-")
     body = f"""
@@ -123,6 +123,16 @@ def button_svg(name, icon_name, label, position):
         + '<path d="M0 14L14 0M3 0H14V11"/></g></g>'
     )
     save(name, f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">{body}</svg>')
+
+
+def stat_tile(name, label, value, icon_name, bg, fg, accent, twinkle=False):
+    extra = '<animate attributeName="opacity" values="1;0.25;1" dur="2.4s" repeatCount="indefinite"/>' if twinkle else ""
+    body = (
+        f'<text x="22" y="38" font-family="{MONO}" font-size="11" letter-spacing="2" fill="{fg}" fill-opacity="0.85">{label}</text>'
+        + icon(icon_name, 166, 22, 24, accent, extra)
+        + f'<text x="20" y="104" font-family="{SERIF}" font-size="56" font-style="italic" fill="{fg}">{value:,}</text>'
+    )
+    save(name, svg(210, 130, body, bg, 22))
 
 
 # ---------- Languages ----------
@@ -204,11 +214,17 @@ def main():
 
     stars = sum(r["stargazers_count"] for r in repos)
 
-    # Block 1
+    # Block 1: hero + buttons
     save("hero.svg", hero_svg())
     button_svg("button-discord.svg", "discord", "DISCORD", "left")
     button_svg("button-instagram.svg", "instagram", "INSTAGRAM", "middle")
     button_svg("button-twitter.svg", "x", "TWITTER", "right")
+
+    # Stat tiles
+    stat_tile("stat-stars.svg", "GITHUB STARS", stars, "star", RED, WHITE, BLACK, twinkle=True)
+    stat_tile("stat-repos.svg", "REPOSITORIES", profile["public_repos"], "repo", BLACK, WHITE, RED)
+    stat_tile("stat-followers.svg", "FOLLOWERS", profile["followers"], "users", WHITE, BLACK, RED)
+    stat_tile("stat-commits.svg", "COMMITS / 12 MO", calendar["totalContributions"], "commit", BLACK, WHITE, RED)
 
     # Languages
     totals = {}
