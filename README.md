@@ -1,11 +1,5 @@
 <div align="center">
 
-<a href="https://www.instagram.com/YOUR_INSTAGRAM">
-  <img src="./assets/instagram-banner.svg" alt="Instagram @YOUR_INSTAGRAM" width="100%">
-</a>
-
-<br><br>
-
 <img src="./assets/hero-card.svg" alt="arpz-dev" width="100%">
 
 <br><br>
