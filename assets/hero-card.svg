@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" role="img" aria-label="arpz-dev">
+  <rect x="1" y="1" width="878" height="298" rx="22" fill="#0A0A0A" stroke="#E10600" stroke-opacity="0.55" stroke-width="2"/>
+
+  <!-- Abstract artwork (replaces the portrait in the reference) -->
+  <circle cx="720" cy="150" r="118" fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-dasharray="3 8"/>
+  <circle cx="720" cy="150" r="86" fill="#E10600">
+    <animate attributeName="r" values="86;92;86" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <rect x="660" y="90" width="120" height="120" fill="none" stroke="#FFFFFF" stroke-width="2">
+    <animateTransform attributeName="transform" type="rotate" from="0 720 150" to="360 720 150" dur="24s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Name -->
+  <text x="48" y="150" font-family="Georgia, 'Times New Roman', serif" font-size="104" font-style="italic" fill="#FFFFFF">
+    <animate attributeName="opacity" from="0" to="1" dur="1s" fill="freeze"/>
+    arpz<tspan fill="#E10600">-dev</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="48" y="196" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#FFFFFF">I design tiny web pages, build Discord bots,</text>
+  <text x="48" y="220" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#FFFFFF">and share the process, one small project at a time.</text>
+
+  <!-- Handles -->
+  <circle cx="52" cy="258" r="4" fill="#E10600"/>
+  <text x="66" y="262" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" fill="#8A8A8A">@YOUR_INSTAGRAM  ·  @YOUR_TWITTER</text>
+</svg>
