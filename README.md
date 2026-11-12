@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./assets/arypaniz-discord.svg" alt="Discord" width="25%"><a href="https://www.instagram.com/arypaniz/"><img src="./assets/arypaniz-instagram.svg" alt="Instagram" width="25%"></a><img src="./assets/arypaniz-x.svg" alt="X / Twitter" width="25%"><a href="mailto:arpz.digital@gmail.com"><img src="./assets/arypaniz-email.svg" alt="Correo" width="25%"></a>
+<img src="./assets/arypaniz-discord.svg?v=2" alt="Discord" width="25%"><a href="https://www.instagram.com/arypaniz/"><img src="./assets/arypaniz-instagram.svg?v=2" alt="Instagram" width="25%"></a><img src="./assets/arypaniz-x.svg?v=2" alt="X / Twitter" width="25%"><a href="mailto:arpz.digital@gmail.com"><img src="./assets/arypaniz-email.svg?v=2" alt="Email" width="25%"></a>
 
 <br>
 
