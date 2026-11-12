@@ -1,16 +1,24 @@
 import json
 import math
 import os
+import re
+import urllib.parse
 import urllib.request
 from datetime import datetime
+from xml.sax.saxutils import escape
 
+# ---------- CONFIG ----------
 USER = os.environ.get("GH_USER", "arpz-dev")
+INSTAGRAM = "YOUR_INSTAGRAM"
+TWITTER = "YOUR_TWITTER"
+FEATURED = []  # e.g. ["repo-one", "repo-two"]; empty = top 4 by stars
 TOKEN = os.environ["GITHUB_TOKEN"]
 
-FONT_SERIF = "Georgia, 'Times New Roman', serif"
-FONT_MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
-BG, RED, WHITE, GREY = "#0A0A0A", "#E10600", "#FFFFFF", "#8A8A8A"
-LEVELS = ["#262626", "#5A0F0C", "#99120E", "#D41A12", "#FF2A1F"]
+RED, DARK_RED, BLACK, WHITE, GREY = "#E10600", "#9B1510", "#0A0A0A", "#FFFFFF", "#8A8A8A"
+SERIF = "Georgia, 'Times New Roman', serif"
+MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+LEVELS = ["#262626", "#5C0F0B", "#9B1510", "#D41A12", "#FF3B30"]
+LANG_COLORS = [RED, WHITE, DARK_RED, GREY, "#FF6A5F", "#5A5A5A", "#FFB3AE", "#333333"]
 
 QUERY = """
 query($login: String!) {
@@ -25,111 +33,245 @@ query($login: String!) {
 }
 """
 
+ICONS = {
+    "instagram": '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/>'
+                 '<circle cx="17.3" cy="6.7" r="0.8" fill="{c}"/>',
+    "discord": '<path fill="{c}" stroke="none" fill-rule="evenodd" d="M5.2 5.6C8.6 3.4 15.4 3.4 18.8 5.6'
+               'C20.8 9 21.8 13 21.6 17.4C19.6 19 17.6 19.8 15.8 20L14.6 18.2C13.1 18.6 10.9 18.6 9.4 18.2'
+               'L8.2 20C6.4 19.8 4.4 19 2.4 17.4C2.2 13 3.2 9 5.2 5.6ZM7 12a1.9 2.2 0 1 0 3.8 0a1.9 2.2 0 1 0 -3.8 0Z'
+               'M13.2 12a1.9 2.2 0 1 0 3.8 0a1.9 2.2 0 1 0 -3.8 0Z"/>',
+    "x": '<path d="M5 4L19 20M19 4L5 20"/>',
+    "star": '<path fill="{c}" stroke="none" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.7-6-3.3-6 3.3 1.3-6.7-5-4.7 6.8-.8z"/>',
+    "repo": '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6"/>',
+    "users": '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"/>'
+             '<circle cx="17.5" cy="9" r="2.5"/><path d="M17.5 14c2.5 0 4.5 1.8 4.5 4.5"/>',
+    "commit": '<circle cx="12" cy="12" r="4"/><path d="M2 12h6M16 12h6"/>',
+}
 
-def fetch():
+
+def api(url, payload=None):
     req = urllib.request.Request(
-        "https://api.github.com/graphql",
-        data=json.dumps({"query": QUERY, "variables": {"login": USER}}).encode(),
-        headers={"Authorization": f"bearer {TOKEN}", "Content-Type": "application/json"},
+        url,
+        data=json.dumps(payload).encode() if payload else None,
+        headers={
+            "Authorization": f"bearer {TOKEN}",
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json",
+        },
     )
     with urllib.request.urlopen(req) as response:
-        data = json.load(response)
-    return data["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+        return json.load(response)
 
 
-def wrap(width, height, body):
+def save(name, content):
+    os.makedirs("assets", exist_ok=True)
+    with open(f"assets/{name}", "w", encoding="utf-8") as f:
+        f.write(content)
+
+
+def svg(w, h, body, bg, rx=24):
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
-        f'<rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="22" fill="{BG}" '
-        f'stroke="{RED}" stroke-opacity="0.55" stroke-width="2"/>{body}</svg>'
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
+        f'<rect width="{w}" height="{h}" rx="{rx}" fill="{bg}"/>{body}</svg>'
     )
 
 
-def heatmap_svg(weeks):
-    width, pad, top = 880, 36, 96
-    days = [d for w in weeks for d in w["contributionDays"]]
-    peak = max((d["contributionCount"] for d in days), default=1) or 1
-    pitch = (width - 2 * pad) / len(weeks)
-    radius = pitch * 0.36
-    height = int(top + 7 * pitch + pad)
+def icon(name, x, y, size, color, extra=""):
+    inner = ICONS[name].replace("{c}", color)
+    return (
+        f'<g transform="translate({x} {y}) scale({size / 24})" fill="none" stroke="{color}" '
+        f'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{inner}{extra}</g>'
+    )
 
+
+# ---------- BLOCK 1: hero + social tiles + stat tiles ----------
+def hero_svg():
+    head, dash, tail = USER.partition("-")
+    body = f"""
+  <g font-family="{MONO}" font-size="12" letter-spacing="2" fill="{WHITE}">
+    <text x="44" y="52">(01) WEB PAGES</text>
+    <text x="224" y="52">(02) DISCORD BOTS</text>
+    <text x="440" y="52">(03) DESIGN LAB</text>
+    <text x="836" y="52" text-anchor="end">&#169; {datetime.now().year}</text>
+  </g>
+  <line x1="44" y1="68" x2="836" y2="68" stroke="{WHITE}" stroke-opacity="0.5"/>
+  <circle cx="720" cy="190" r="92" fill="{BLACK}"/>
+  <circle cx="720" cy="190" r="118" fill="none" stroke="{WHITE}" stroke-opacity="0.6" stroke-dasharray="3 9"/>
+  <circle r="9" fill="{WHITE}">
+    <animateMotion dur="9s" repeatCount="indefinite" path="M602 190a118 118 0 1 0 236 0a118 118 0 1 0 -236 0"/>
+  </circle>
+  <rect x="672" y="142" width="96" height="96" fill="none" stroke="{WHITE}" stroke-width="2">
+    <animateTransform attributeName="transform" type="rotate" from="0 720 190" to="360 720 190" dur="26s" repeatCount="indefinite"/>
+  </rect>
+  <text x="40" y="214" font-family="{SERIF}" font-size="128" font-style="italic" fill="{WHITE}">
+    <animate attributeName="opacity" from="0" to="1" dur="1s" fill="freeze"/>{escape(head)}<tspan fill="{BLACK}">{escape(dash + tail)}</tspan>
+  </text>
+  <text x="44" y="254" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="{WHITE}">I design tiny web pages, build Discord bots and share the process.</text>
+  <rect x="44" y="278" width="300" height="32" rx="16" fill="{BLACK}"/>
+  <circle cx="64" cy="294" r="5" fill="{WHITE}"><animate attributeName="opacity" values="1;0.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
+  <text x="80" y="298" font-family="{MONO}" font-size="11" letter-spacing="1.5" fill="{WHITE}">OPEN FOR NEW MINI-PROJECTS</text>
+"""
+    return svg(880, 330, body, RED, 28)
+
+
+def social_tile(name, icon_name, label, sub, bg, fg, accent):
+    body = (
+        f'<circle cx="52" cy="46" r="28" fill="{fg}"/>'
+        + icon(icon_name, 38, 32, 28, accent)
+        + f'<text x="94" y="56" font-family="{SERIF}" font-size="28" font-style="italic" fill="{fg}">{label}</text>'
+        + f'<text x="28" y="108" font-family="{MONO}" font-size="12" letter-spacing="1" fill="{fg}" fill-opacity="0.85">{escape(sub)}</text>'
+        + f'<g transform="translate(246 22)"><g fill="none" stroke="{fg}" stroke-width="2.5" stroke-linecap="round">'
+        + '<animateTransform attributeName="transform" type="translate" values="0 0;4 -4;0 0" dur="2s" repeatCount="indefinite"/>'
+        + '<path d="M0 14L14 0M3 0H14V11"/></g></g>'
+    )
+    save(name, svg(288, 130, body, bg, 22))
+
+
+def stat_tile(name, label, value, icon_name, bg, fg, accent, twinkle=False):
+    extra = '<animate attributeName="opacity" values="1;0.25;1" dur="2.4s" repeatCount="indefinite"/>' if twinkle else ""
+    body = (
+        f'<text x="22" y="38" font-family="{MONO}" font-size="11" letter-spacing="2" fill="{fg}" fill-opacity="0.85">{label}</text>'
+        + icon(icon_name, 166, 22, 24, accent, extra)
+        + f'<text x="20" y="104" font-family="{SERIF}" font-size="56" font-style="italic" fill="{fg}">{value:,}</text>'
+    )
+    save(name, svg(210, 130, body, bg, 22))
+
+
+# ---------- Languages ----------
+def languages_svg(langs):
+    w, pad = 880, 36
+    bar_w = w - 2 * pad
     parts = [
-        f'<text x="{pad}" y="56" font-family="{FONT_SERIF}" font-size="30" font-style="italic" fill="{WHITE}">'
-        f'Every day, <tspan fill="{RED}">in red</tspan></text>',
-        f'<text x="{width - pad}" y="52" text-anchor="end" font-family="{FONT_MONO}" font-size="10" '
-        f'letter-spacing="2" fill="{GREY}">UPDATED DAILY</text>',
+        f'<text x="{pad}" y="56" font-family="{SERIF}" font-size="30" font-style="italic" fill="{WHITE}">'
+        f'Languages, <tspan fill="{RED}">in the wild</tspan></text>',
+        f'<text x="{w - pad}" y="52" text-anchor="end" font-family="{MONO}" font-size="10" letter-spacing="2" fill="{GREY}">ALL PUBLIC REPOS</text>',
+        f'<clipPath id="bar"><rect x="{pad}" y="82" width="{bar_w}" height="24" rx="12"/></clipPath><g clip-path="url(#bar)">',
     ]
-
-    i = 0
-    for col, week in enumerate(weeks):
-        for day in week["contributionDays"]:
-            count = day["contributionCount"]
-            level = 0 if count == 0 else max(1, min(4, math.ceil(4 * count / peak)))
-            cx = pad + col * pitch + pitch / 2
-            cy = top + day["weekday"] * pitch + pitch / 2
-            if level >= 3:
-                begin = (i % 25) * 0.12
-                parts.append(
-                    f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius:.1f}" fill="{LEVELS[level]}">'
-                    f'<animate attributeName="opacity" values="1;0.5;1" dur="3s" begin="{begin:.2f}s" repeatCount="indefinite"/>'
-                    f'</circle>'
-                )
-                i += 1
-            else:
-                parts.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius:.1f}" fill="{LEVELS[level]}"/>')
-
-    return wrap(width, height, "".join(parts))
+    x = pad
+    for i, (lang, pct) in enumerate(langs):
+        sw = bar_w * pct / 100
+        parts.append(
+            f'<rect x="{x:.1f}" y="82" width="{sw:.1f}" height="24" fill="{LANG_COLORS[i % len(LANG_COLORS)]}">'
+            f'<animate attributeName="width" from="0" to="{sw:.1f}" dur="0.8s" begin="{i * 0.15:.2f}s" fill="freeze"/></rect>'
+        )
+        x += sw
+    parts.append("</g>")
+    for i, (lang, pct) in enumerate(langs[:6]):
+        lx, ly = pad + (i % 3) * 270, 144 + (i // 3) * 28
+        parts.append(f'<circle cx="{lx + 5}" cy="{ly - 4}" r="5" fill="{LANG_COLORS[i % len(LANG_COLORS)]}"/>')
+        parts.append(
+            f'<text x="{lx + 18}" y="{ly}" font-family="{MONO}" font-size="13" fill="{WHITE}">'
+            f'{escape(lang)} <tspan fill="{GREY}">{pct:.1f}%</tspan></text>'
+        )
+    return svg(w, 204, "".join(parts), BLACK)
 
 
+# ---------- Contributions (red squares) ----------
 def contributions_svg(calendar):
-    width, height, pad = 880, 270, 36
-    by_month = {}
-    for week in calendar["weeks"]:
-        for day in week["contributionDays"]:
-            key = day["date"][:7]
-            by_month[key] = by_month.get(key, 0) + day["contributionCount"]
-
-    months = sorted(by_month)[-12:]
-    values = [by_month[m] for m in months]
-    peak = max(values) or 1
-    base, max_h = 232, 76
-    slot = (width - 2 * pad) / len(months)
-    bar_w = slot * 0.62
-
+    w, pad, top = 880, 36, 150
+    weeks = calendar["weeks"]
+    pitch = (w - 2 * pad) / len(weeks)
+    side = pitch * 0.78
+    days = [d for wk in weeks for d in wk["contributionDays"]]
+    peak = max((d["contributionCount"] for d in days), default=1) or 1
+    h = int(top + 7 * pitch + 56)
     parts = [
-        f'<text x="{pad}" y="52" font-family="{FONT_MONO}" font-size="10" letter-spacing="2" '
-        f'fill="{GREY}">THE LAST 12 MONTHS ON GITHUB</text>',
-        f'<text x="{pad}" y="124" font-family="{FONT_SERIF}" font-size="64" font-style="italic" fill="{WHITE}">'
+        f'<text x="{pad}" y="48" font-family="{MONO}" font-size="10" letter-spacing="2" fill="{GREY}">THE LAST 12 MONTHS ON GITHUB</text>',
+        f'<text x="{pad}" y="112" font-family="{SERIF}" font-size="56" font-style="italic" fill="{WHITE}">'
         f'{calendar["totalContributions"]:,} <tspan fill="{RED}">contributions</tspan></text>',
     ]
+    for col, wk in enumerate(weeks):
+        for d in wk["contributionDays"]:
+            count = d["contributionCount"]
+            level = 0 if count == 0 else max(1, min(4, math.ceil(4 * count / peak)))
+            x = pad + col * pitch + (pitch - side) / 2
+            y = top + d["weekday"] * pitch + (pitch - side) / 2
+            parts.append(
+                f'<rect x="{x:.1f}" y="{y:.1f}" width="{side:.1f}" height="{side:.1f}" rx="3" fill="{LEVELS[level]}" opacity="0">'
+                f'<animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="{col * 0.025:.2f}s" fill="freeze"/></rect>'
+            )
+    lx, ly = w - pad - 190, int(top + 7 * pitch + 24)
+    parts.append(f'<text x="{lx}" y="{ly + 10}" font-family="{MONO}" font-size="10" fill="{GREY}">LESS</text>')
+    for i, color in enumerate(LEVELS):
+        parts.append(f'<rect x="{lx + 40 + i * 18}" y="{ly}" width="12" height="12" rx="3" fill="{color}"/>')
+    parts.append(f'<text x="{lx + 136}" y="{ly + 10}" font-family="{MONO}" font-size="10" fill="{GREY}">MORE</text>')
+    return svg(w, h, "".join(parts), BLACK)
 
-    for i, (month, value) in enumerate(zip(months, values)):
-        h = max(3, round(max_h * value / peak))
-        x = pad + i * slot + (slot - bar_w) / 2
-        color = RED if value == peak else WHITE
-        label = datetime.strptime(month + "-01", "%Y-%m-%d").strftime("%b").upper()
-        delay = i * 0.06
-        parts.append(
-            f'<rect x="{x:.1f}" y="{base - h}" width="{bar_w:.1f}" height="{h}" rx="3" fill="{color}">'
-            f'<animate attributeName="height" from="0" to="{h}" dur="0.8s" begin="{delay:.2f}s" fill="freeze"/>'
-            f'<animate attributeName="y" from="{base}" to="{base - h}" dur="0.8s" begin="{delay:.2f}s" fill="freeze"/>'
-            f'</rect>'
-        )
-        parts.append(
-            f'<text x="{x + bar_w / 2:.1f}" y="{base + 20}" text-anchor="middle" '
-            f'font-family="{FONT_MONO}" font-size="10" fill="{GREY}">{label}</text>'
-        )
 
-    return wrap(width, height, "".join(parts))
+# ---------- README blocks ----------
+def replace_block(text, tag, content):
+    pattern = re.compile(rf"(<!--{tag}:START-->)(.*?)(<!--{tag}:END-->)", re.S)
+    return pattern.sub(lambda m: f"{m.group(1)}\n{content}\n{m.group(3)}", text)
 
 
 def main():
-    calendar = fetch()
-    os.makedirs("assets", exist_ok=True)
-    with open("assets/daily-heatmap.svg", "w", encoding="utf-8") as f:
-        f.write(heatmap_svg(calendar["weeks"]))
-    with open("assets/contributions-card.svg", "w", encoding="utf-8") as f:
-        f.write(contributions_svg(calendar))
+    profile = api(f"https://api.github.com/users/{USER}")
+    repos = [
+        r for r in api(f"https://api.github.com/users/{USER}/repos?per_page=100&type=owner")
+        if not r["fork"] and r["name"] != USER
+    ]
+    calendar = api(
+        "https://api.github.com/graphql", {"query": QUERY, "variables": {"login": USER}}
+    )["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+
+    stars = sum(r["stargazers_count"] for r in repos)
+
+    # Block 1
+    save("hero.svg", hero_svg())
+    social_tile("tile-discord.svg", "discord", "Discord", "Join the community", BLACK, WHITE, RED)
+    social_tile("tile-instagram.svg", "instagram", "Instagram", f"@{INSTAGRAM}", WHITE, BLACK, RED)
+    social_tile("tile-twitter.svg", "x", "Twitter", f"@{TWITTER}", RED, WHITE, BLACK)
+    stat_tile("stat-stars.svg", "GITHUB STARS", stars, "star", RED, WHITE, BLACK, twinkle=True)
+    stat_tile("stat-repos.svg", "REPOSITORIES", profile["public_repos"], "repo", BLACK, WHITE, RED)
+    stat_tile("stat-followers.svg", "FOLLOWERS", profile["followers"], "users", WHITE, BLACK, RED)
+    stat_tile("stat-commits.svg", "COMMITS / 12 MO", calendar["totalContributions"], "commit", BLACK, WHITE, RED)
+
+    # Languages
+    totals = {}
+    for r in repos:
+        for lang, n in api(r["languages_url"]).items():
+            totals[lang] = totals.get(lang, 0) + n
+    grand = sum(totals.values())
+    ranked = sorted(totals.items(), key=lambda kv: kv[1], reverse=True)
+    langs = [(k, v * 100 / grand) for k, v in ranked[:7]] if grand else [("No data yet", 100.0)]
+    rest = sum(v for _, v in ranked[7:])
+    if grand and rest:
+        langs.append(("Other", rest * 100 / grand))
+    save("languages.svg", languages_svg(langs))
+    save("contributions.svg", contributions_svg(calendar))
+
+    # README: clickable language chips + featured repos
+    if not os.path.exists("README.md"):
+        return
+    with open("README.md", encoding="utf-8") as f:
+        readme = f.read()
+
+    chips = []
+    for lang, pct in langs:
+        if lang in ("Other", "No data yet"):
+            continue
+        label = urllib.parse.quote(lang.replace("-", "--").replace("_", "__"))
+        url = f"https://github.com/{USER}?tab=repositories&language={urllib.parse.quote(lang)}"
+        chips.append(
+            f'<a href="{url}"><img src="https://img.shields.io/badge/{label}-{pct:.1f}%25-E10600'
+            f'?style=for-the-badge&labelColor=0A0A0A" alt="{escape(lang)}"></a>'
+        )
+    readme = replace_block(readme, "LANGS", "\n".join(chips))
+
+    by_name = {r["name"]: r for r in repos}
+    picked = [by_name[n] for n in FEATURED if n in by_name] or sorted(
+        repos, key=lambda r: (r["stargazers_count"], r["pushed_at"]), reverse=True
+    )[:4]
+    cards = [
+        f'<a href="{r["html_url"]}"><img width="48%" alt="{escape(r["name"])}" '
+        f'src="https://github-readme-stats.vercel.app/api/pin/?username={USER}&repo={r["name"]}'
+        f'&bg_color=0A0A0A&title_color=E10600&text_color=FFFFFF&icon_color=E10600&border_color=E10600"></a>'
+        for r in picked
+    ]
+    readme = replace_block(readme, "REPOS", "\n".join(cards))
+
+    with open("README.md", "w", encoding="utf-8") as f:
+        f.write(readme)
 
 
 if __name__ == "__main__":
